@@ -6,18 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Tags | bbmovistar</title>
+  <title>浏览器渲染优化 | bbmovistar</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Think Big Do Small">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Tags">
-<meta property="og:url" content="http://yoursite.com/tags/index.html">
+  <meta name="description" content="帧 多数设备刷新屏幕的频率为60帧/秒(fps), 为了避免出现卡顿或丢帧现象，需要在1000ms内完成60帧的渲染。每帧渲染的时间则为16ms，考虑到浏览器需要进行额外的一些处理，因此每帧的渲染时间需控制在10ms左右  如何构建一帧？浏览器发起请求 –&amp;gt; 服务器返回html资源 –&amp;gt; 浏览器解析html，并生成dom树(parseHTML) –&amp;gt; 结合样式表，生成渲染树（只有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浏览器渲染优化">
+<meta property="og:url" content="http://yoursite.com/2017/12/10/浏览器渲染/index.html">
 <meta property="og:site_name" content="bbmovistar">
-<meta property="og:description" content="Think Big Do Small">
-<meta property="og:updated_time" content="2017-12-09T15:53:57.511Z">
+<meta property="og:description" content="帧 多数设备刷新屏幕的频率为60帧/秒(fps), 为了避免出现卡顿或丢帧现象，需要在1000ms内完成60帧的渲染。每帧渲染的时间则为16ms，考虑到浏览器需要进行额外的一些处理，因此每帧的渲染时间需控制在10ms左右  如何构建一帧？浏览器发起请求 –&amp;gt; 服务器返回html资源 –&amp;gt; 浏览器解析html，并生成dom树(parseHTML) –&amp;gt; 结合样式表，生成渲染树（只有">
+<meta property="og:updated_time" content="2017-12-10T07:38:05.750Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Tags">
-<meta name="twitter:description" content="Think Big Do Small">
+<meta name="twitter:title" content="浏览器渲染优化">
+<meta name="twitter:description" content="帧 多数设备刷新屏幕的频率为60帧/秒(fps), 为了避免出现卡顿或丢帧现象，需要在1000ms内完成60帧的渲染。每帧渲染的时间则为16ms，考虑到浏览器需要进行额外的一些处理，因此每帧的渲染时间需控制在10ms左右  如何构建一帧？浏览器发起请求 –&amp;gt; 服务器返回html资源 –&amp;gt; 浏览器解析html，并生成dom树(parseHTML) –&amp;gt; 结合样式表，生成渲染树（只有">
   
     <link rel="alternative" href="/atom.xml" title="bbmovistar" type="application/atom+xml">
   
@@ -149,27 +149,39 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="tags-" class="article article-type-tags " itemscope itemprop="blogPost">
+            <article id="post-浏览器渲染" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Tags
+      浏览器渲染优化
     </h1>
   
 
         
-        <a href="/tags/index.html" class="archive-article-date">
-  	<time datetime="2017-12-09T15:53:57.511Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-12-09</time>
+        <a href="/2017/12/10/浏览器渲染/" class="archive-article-date">
+  	<time datetime="2017-12-10T06:07:42.225Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-12-10</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h2 id="帧"><a href="#帧" class="headerlink" title="帧"></a>帧</h2><blockquote>
+<p>多数设备刷新屏幕的频率为60帧/秒(fps), 为了避免出现卡顿或丢帧现象，需要在1000ms内完成60帧的渲染。每帧渲染的时间则为16ms，考虑到浏览器需要进行额外的一些处理，因此每帧的渲染时间需控制在10ms左右</p>
+</blockquote>
+<h3 id="如何构建一帧？"><a href="#如何构建一帧？" class="headerlink" title="如何构建一帧？"></a>如何构建一帧？</h3><p>浏览器发起请求 –&gt; 服务器返回html资源 –&gt; 浏览器解析html，并生成dom树(parseHTML) –&gt; 结合样式表，生成渲染树（只有实际上会显示在浏览器上的元素，才会在渲染树中出现）–&gt; 计算layout –&gt; 从矢量到光栅 –&gt; 图层管理</p>
+<p>js –&gt; style –&gt; layout –&gt; paint –&gt; composite(不同的样式改变影响到管道的不同部分，进而影响到应用的性能)</p>
+<h3 id="网络应用生命周期"><a href="#网络应用生命周期" class="headerlink" title="网络应用生命周期"></a>网络应用生命周期</h3><p><strong>RAIL</strong>: Response + Animation + Idle + Load</p>
+<ol>
+<li><p>如何应用闲置时间？（通常在50ms内）</p>
+</li>
+<li><p>动画，任何涉及到动作或屏幕手指操作的互动，都需要达到60帧/秒</p>
+</li>
+</ol>
+
       
 
       
@@ -248,7 +260,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/tags/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2017/12/10/浏览器渲染/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -310,7 +322,7 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
